@@ -11,8 +11,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: toolchain
-      run: git clone --depth=1 https://github.com/mvaisakh/gcc-x86 ~/tc/eva
+    - name: install deps
+      run: sudo apt install libelf-dev
     - name: Set build date
       id: get-date
       run: |  # to generate kernel gzip based on time
@@ -20,7 +20,7 @@ jobs:
     - name: configure
       run: make O=out cherry-perf_defconfig
     - name: make
-      run: make O=out CROSS_COMPILE=~/tc/eva/bin/x86_64-elf- -j$(nproc --all)
+      run: make O=out -j$(nproc --all)
     - name: Kernel Image
       run: cp out/arch/x86_64/boot/bzImage cherry-${{ steps.get-date.outputs.date }}
     - name: Create Release
@@ -40,6 +40,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./kernel-${{ steps.get-date.outputs.date }}.gz
-        asset_name: kernel-${{ steps.get-date.outputs.date }}.gz
+        asset_path: ./cherry-${{ steps.get-date.outputs.date }}
+        asset_name: cherry-${{ steps.get-date.outputs.date }}
         asset_content_type: application/gz
