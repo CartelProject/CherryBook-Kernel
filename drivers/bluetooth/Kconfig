@@ -45,7 +45,7 @@ config BT_HCIBTUSB_BCM
 	bool "Broadcom protocol support"
 	depends on BT_HCIBTUSB
 	select BT_BCM
-	default y
+	default n
 	help
 	  The Broadcom protocol support enables firmware and patchram
 	  download support for Broadcom Bluetooth controllers.
